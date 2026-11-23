@@ -1,18 +1,35 @@
-const http = require("http");
+const { readFile, writeFile } = require("fs").promises;
+const util = require("util");
 
-const server = http.createServer((req, res) => {
-  if (req.url === "/") {
-    return res.end("Welcome to our homepage.");
+const start = async () => {
+  try {
+    const first = await readFile("./content/first.txt", "utf-8");
+    const second = await readFile("./content/second.txt", "utf-8");
+    await writeFile(
+      "./content/mind-grenade.txt",
+      `This is DATA: ${first} ${second}`,
+      { flag: "a" },
+    );
+    console.log(first, second);
+  } catch (error) {
+    console.log(error);
   }
+};
 
-  if (req.url === "/about") {
-    return res.end("Here is a short history about us");
-  }
+start();
 
-  res.end(`
-    <h1>Oops!</h1>
-    <p>We can't seem to find the page you are looking for</p>    
-    <a href="/">Go back home</a>
-    `);
-});
-server.listen(5000);
+// const getText = (path) => {
+//   return new Promise((resolve, reject) => {
+//     readFile(path, "utf-8", (err, data) => {
+//       if (err) {
+//         reject(err);
+//       } else {
+//         resolve(data);
+//       }
+//     });
+//   });
+// };
+
+// getText("./content/first.txt")
+//   .then((result) => console.log(result))
+//   .catch((err) => console.log(err));
